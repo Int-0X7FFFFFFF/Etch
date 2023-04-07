@@ -5,6 +5,14 @@ device = None
 
 app = Flask(__name__)
 
+@app.route('/api/server', methods=["GET"])
+def get_devices():
+    return_data = {
+        'status':True,
+        'mag': "server online"
+    }
+    return return_data
+
 @app.route('/api/devices', methods=["GET"])
 def get_devices():
     return_data = {
