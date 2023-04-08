@@ -98,6 +98,28 @@ def start():
 
 
 
+@app.route('/api/image/post', methods=["post"])
+def image_process_post():
+    global lines
+    img_b64 = request.form['img']
+    print(img_b64)
+    img_buffer = base64.b64decode(img_b64)
+    nparr = np.frombuffer(img_buffer, np.uint8)
+    # Load the image from the numpy array
+    img = cv2.imdecode(nparr, cv2.IMREAD_GRAYSCALE)
+    img, lines, output = get_lines(img)
+    is_success, buffer = cv2.imencode(".png", output)
+    output_byt = BytesIO(buffer)
+    output_b64 = base64.b64encode(output_byt.getvalue()).decode("utf-8")
+    return_data = {
+        'status':True,
+        'msg': "ok",
+        'img': output_b64,
+    }
+    return return_data
+
+
+
 def get_lines(img):
     # img = cv2.imread(path, 0)
 

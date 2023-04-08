@@ -72,13 +72,23 @@ class _PrviewPageState extends State<PrviewPage> {
                       const Text("Seclect image"),
                       Image.memory(
                         base64Decode(b64Img),
+                        fit: BoxFit
+                            .contain, // Set fit property to control image size
+                        width: 500, // Set maximum width for the image
+                        height: 500,
                       ),
                     ],
                   ),
                   Column(
                     children: [
                       const Text('expect image'),
-                      Image.memory(base64Decode(b64Output))
+                      Image.memory(
+                        base64Decode(b64Output),
+                        fit: BoxFit
+                            .contain, // Set fit property to control image size
+                        width: 500, // Set maximum width for the image
+                        height: 500,
+                      )
                     ],
                   )
                 ],

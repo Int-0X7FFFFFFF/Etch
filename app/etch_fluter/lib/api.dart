@@ -54,4 +54,12 @@ class Server {
     response = await dio.get(API, queryParameters: {});
     return response.data;
   }
+
+  Future post_image(String imgB64) async {
+    var dio = Dio();
+    Response response;
+    String API = "http://$api/api/image/post";
+    response = await dio.post(API, data: FormData.fromMap({'img': imgB64}));
+    return response.data;
+  }
 }
