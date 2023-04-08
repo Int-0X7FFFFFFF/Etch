@@ -10,7 +10,7 @@ class Server {
   Future is_server_online() async {
     var dio = Dio();
     Response response;
-    String API = "http://$api/api/server";
+    String API = "http://$api/";
     response = await dio.get(API, queryParameters: {});
     return response.data;
   }
@@ -18,7 +18,7 @@ class Server {
   Future get_devices() async {
     var dio = Dio();
     Response response;
-    String API = "http://$api/api/devices";
+    String API = "http://$api/devices";
     response = await dio.get(API, queryParameters: {});
     return response.data;
   }
@@ -26,7 +26,7 @@ class Server {
   Future connect_device(String dev) async {
     var dio = Dio();
     Response response;
-    String API = "http://$api/api/connect";
+    String API = "http://$api/connect";
     response = await dio.get(API, queryParameters: {'device': dev});
     return response.data;
   }
