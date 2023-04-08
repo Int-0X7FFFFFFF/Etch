@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask import request
 from etch_a_sketch import *
 import serial
@@ -6,7 +6,7 @@ from serial.tools.list_ports import *
 import time
 import cv2
 
-device = None
+device:serial.Serial = None
 
 app = Flask(__name__)
 
@@ -16,7 +16,7 @@ def get_server():
         'status': True,
         'msg': 'connected to server'
     }
-    return return_data
+    return jsonify(return_data)
 
 @app.route('/devices', methods=["GET"])
 def get_devices():
@@ -28,7 +28,7 @@ def get_devices():
     return_data['status'], return_data['devices'] = get_available_ports()
     if return_data['status'] == True:
         return_data['msg'] = 'choose a device'
-    return return_data
+    return jsonify(return_data)
 
 @app.route('/connect', methods=["GET"])
 def connect():
@@ -40,25 +40,30 @@ def connect():
     port = request.args.get("device")
     if device is None:
         device, msg = connect_serial_port(port)
-        if device:
-            return_data['status'] = True
-        return_data['msg'] = msg
     else:
+        device = None
         if port == 'disconnect':
-            device = None
             return_data['status'] = True
-            return_data['msg'] = 'disconnected'
+            msg = 'disconnected'
         else:
-            return_data['msg'] = 'already connected'
-    return return_data
+            device.close()
+            device, msg = connect_serial_port(port)
+    if device:
+        return_data['status'] = True
+    return_data['msg'] = msg
+    return jsonify(return_data)
 
-@app.route('/api/gcode', methods=["GET"])
+@app.route('/connect/gcode', methods=["GET"])
 def send_Gcode():
-    g_code = request.args.get("code")
-    g_code = str(g_code)
     return_data = {
-        'status':True
+        'status': False,
+        'msg' : ''
     }
+    g_code = request.args.get("code", type=str)
+    if g_code is None:
+        return_data['msg'] = 'need G-code'
+        
+    msg = send_gcode(device, g_code, debug=False)
     return return_data
 
 @app.route('/api/image/upload', methods=["GET"])

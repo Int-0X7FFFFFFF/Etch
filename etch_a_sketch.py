@@ -210,14 +210,16 @@ def send_gcode_file(ser:serial.Serial, file_path=None):
     except FileNotFoundError:
         print("File not found!")
 
-def send_gcode(ser:serial.Serial, gcode):
+def send_gcode(ser:serial.Serial, gcode, debug=True):
         print(gcode)
         if gcode[-1] != '\n':
             gcode = gcode + '\n'
         gcode = gcode.upper()
         ser.write(gcode.encode('utf-8'))
         response = ser.readline().decode().strip()
-        print(response)
+        if debug:
+            print(response)
+        return response
 
 if __name__ == "__main__":
     # main_menu(None)
