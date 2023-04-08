@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'connect_page.dart';
 import 'common.dart';
+import 'draw/draw_preview.dart';
 
 void main(List<String> args) async {
   if (Platform.isAndroid) {
@@ -39,6 +40,7 @@ class _MyAppState extends State<MyApp> {
     '/': (context, {arguments}) => const ConnectPage(),
     '/dev': (context, {arguments}) => const DevicesPage(),
     '/home': (context, {arguments}) => const HomePage(),
+    '/prview': (context, {arguments}) => const PrviewPage(),
   };
 
   Future<dynamic> highRefreshRate() async {

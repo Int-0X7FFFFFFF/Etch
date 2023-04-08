@@ -38,12 +38,16 @@ class _DrawPageState extends State<DrawPage> {
               String base64Image = base64Encode(imageBytes);
               var data = await server.get_image(base64Image);
               if (data['status']) {
-                print(data['img']);
+                // print(data['img']);
+                String base64Output = data['img'];
                 Provider.of<Load>(context, listen: false).outloading();
+                Navigator.pushNamed(context, '/prview',
+                    arguments: {'img': base64Image, 'output': base64Output});
               } else {
                 throw Exception(data['msg']);
               }
             } else {
+              Provider.of<Load>(context, listen: false).outloading();
               // No image picked
             }
           } catch (e) {
@@ -69,7 +73,7 @@ class _DrawPageState extends State<DrawPage> {
       return LoadingAnimationWidget.newtonCradle(color: Colors.white, size: 50);
     }
     if (loadStat == false) {
-      return const Icon(Icons.cloud_sync);
+      return const Icon(Icons.upload_file);
     }
   }
 }

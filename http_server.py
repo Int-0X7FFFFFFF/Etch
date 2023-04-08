@@ -91,7 +91,8 @@ def image_process():
 @app.route('/api/start', methods=["GET"])
 def start():
     return_data = {
-        'status':True
+        'status':True,
+        'msg':"drawing starts now"
     }
     return return_data
 
