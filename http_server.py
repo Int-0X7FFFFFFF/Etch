@@ -1,17 +1,19 @@
 from flask import Flask
 from flask import request
+from etch_a_sketch import *
+import serial
+from serial.tools.list_ports import *
+import time
+import cv2
 
 device = None
 
 app = Flask(__name__)
 
-@app.route('/api/server', methods=["GET"])
+@app.route('/', methods=["GET"])
 def get_server():
-    return_data = {
-        'status':True,
-        'msg': "server online"
-    }
-    return return_data
+    
+    return get_available_ports()
 
 @app.route('/api/devices', methods=["GET"])
 def get_devices():
