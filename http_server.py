@@ -9,7 +9,7 @@ app = Flask(__name__)
 def get_server():
     return_data = {
         'status':True,
-        'mag': "server online"
+        'msg': "server online"
     }
     return return_data
 
