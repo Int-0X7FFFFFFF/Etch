@@ -10,13 +10,16 @@ import 'common.dart';
 import 'draw/draw_preview.dart';
 
 void main(List<String> args) async {
-  if (Platform.isAndroid) {
-    WidgetsFlutterBinding.ensureInitialized();
-    final overlayStye = _makeSystemOverlayStyle();
-    SystemChrome.setSystemUIOverlayStyle(overlayStye);
-    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
-        overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
-  }
+  try {
+    if (Platform.isAndroid) {
+      WidgetsFlutterBinding.ensureInitialized();
+      final overlayStye = _makeSystemOverlayStyle();
+      SystemChrome.setSystemUIOverlayStyle(overlayStye);
+      await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
+          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    }
+    // ignore: empty_catches
+  } catch (e) {}
 
   runApp(MultiProvider(
     providers: [
