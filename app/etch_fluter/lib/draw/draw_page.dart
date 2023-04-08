@@ -1,7 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import '../common.dart';
 import 'dart:convert';
@@ -38,6 +39,7 @@ class _DrawPageState extends State<DrawPage> {
               var data = await server.get_image(base64Image);
               if (data['status']) {
                 print(data['img']);
+                Provider.of<Load>(context, listen: false).outloading();
               } else {
                 throw Exception(data['msg']);
               }
