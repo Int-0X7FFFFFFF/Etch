@@ -44,3 +44,5 @@ def get_lines(path):
     cv2.imwrite("output.jpg", canvas)
 
     return lines, h, w
+
+get_lines("./TinyTina.jpg")

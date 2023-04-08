@@ -39,10 +39,12 @@ def connect():
     if device is None:
         port = request.args.get("device")
         device, msg = connect_serial_port(port)
-    if device:
+        if device:
+            return_data['status'] = True
+        return_data['msg'] = msg
+    else:
         return_data['status'] = True
-    return_data['msg'] = msg
-
+        return_data['msg'] = 'already connected'
     return return_data
 
 @app.route('/api/gcode', methods=["GET"])
