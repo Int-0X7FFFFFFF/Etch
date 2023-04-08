@@ -61,20 +61,29 @@ class _PrviewPageState extends State<PrviewPage> {
           child: getButton(),
         ),
         body: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text("Seclect image"),
-              Image.memory(
-                base64Decode(b64Img),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                      const Text("Seclect image"),
+                      Image.memory(
+                        base64Decode(b64Img),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      const Text('expect image'),
+                      Image.memory(base64Decode(b64Output))
+                    ],
+                  )
+                ],
               ),
-              const Text('expect image'),
-              Image.memory(base64Decode(b64Output))
-            ],
-          ),
-        ));
+            )));
   }
 
   getButton() {
