@@ -36,7 +36,7 @@ class _DrawPageState extends State<DrawPage> {
               List<int> imageBytes = await pickedImage.readAsBytes();
               // Convert the image bytes to base64
               String base64Image = base64Encode(imageBytes);
-              var data = await server.get_image(base64Image);
+              var data = await server.post_image(base64Image);
               if (data['status']) {
                 // print(data['img']);
                 String base64Output = data['img'];
