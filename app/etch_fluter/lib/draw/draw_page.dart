@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import '../common.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -23,18 +24,25 @@ class _DrawPageState extends State<DrawPage> {
         onPressed: () async {
           try {
             Provider.of<Load>(context, listen: false).onloading();
-            XFile? img =
-                await ImagePicker().pickImage(source: ImageSource.gallery);
-            // Load an image from file
-            File imageFile = File(img!.path);
-            List<int> imageBytes = await imageFile.readAsBytes();
-            // Convert the image bytes to base64
-            String base64Image = base64Encode(imageBytes);
-            var data = await server.get_image(base64Image);
-            if (data['status']) {
-              print(data['img']);
+            FilePickerResult? result = await FilePicker.platform.pickFiles(
+              type: FileType.image,
+              allowMultiple: false,
+            );
+            if (result != null && result.files.isNotEmpty) {
+              File pickedImage = File(result.files.single.path!);
+              // Do something with the picked image file
+              // Load an image from file
+              List<int> imageBytes = await pickedImage.readAsBytes();
+              // Convert the image bytes to base64
+              String base64Image = base64Encode(imageBytes);
+              var data = await server.get_image(base64Image);
+              if (data['status']) {
+                print(data['img']);
+              } else {
+                throw Exception(data['msg']);
+              }
             } else {
-              throw Exception(data['msg']);
+              // No image picked
             }
           } catch (e) {
             Provider.of<Load>(context, listen: false).outloading();
