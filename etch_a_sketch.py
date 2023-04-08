@@ -60,10 +60,40 @@ def connect_serial_port(baud_rate=115200, timeout=1):
 
 def get_available_ports():
     available_ports = comports()
+    ports_available = False
     port_names = []
     for port in available_ports:
         port_names.append(port.device)
-    return port_names
+    if len(port_names) > 0:
+        ports_available = True
+    return ports_available, port_names
+
+def connect_serial_port(port_name, baud_rate=115200, timeout=1):
+    try:
+        # Open serial port connection
+        ser = serial.Serial(port=port_name, baudrate=baud_rate, timeout=timeout)
+        ser.set_buffer_size(rx_size=4096, tx_size=4096)
+        time.sleep(1.0)
+        ser.write(b'M115\n')
+        response = ser.readline().decode().strip()
+        if not response.startswith('echo:Marlin'):
+            return None, 'Marlin is not installed'
+        # set to relative motion mode
+        ser.write(b"G91\n")
+        response = ser.readline().decode('utf-8').rstrip()
+        ser.write(b"G21\n")
+        response = ser.readline().decode('utf-8').rstrip()
+    except serial.SerialException:
+        msg = "Failed to establish serial connection"
+    except serial.SerialTimeoutException:
+        msg = "Timeout occurred while waiting for response"
+    except Exception as e:
+        msg = f"An error occurred: {e}"
+    
+    if ser.is_open:
+        return ser, 'connect to the board successful'
+    else:
+        return None, msg
 
 def main_menu(ser:serial.Serial):
     while True:

@@ -12,30 +12,37 @@ app = Flask(__name__)
 
 @app.route('/', methods=["GET"])
 def get_server():
-    
-    return get_available_ports()
-
-@app.route('/api/devices', methods=["GET"])
-def get_devices():
     return_data = {
-        'status':True
+        'status': True,
+        'msg': 'connected to server'
     }
     return return_data
 
-@app.route('/api/connect', methods=["GET"])
-def connect():
-    device_number = request.args.get("device")
-    try:
-        device_number = int(device_number)
-    except:
-        return {
-        'status':False,
-        'msg':'device number must be a number'
-    }
+@app.route('/devices', methods=["GET"])
+def get_devices():
     return_data = {
-        'status':True,
-        'msg': f'connect device {device_number} successful'
+        'status': False,
+        'devices': [],
+        'msg': 'no devices available'
     }
+    return_data['status'], return_data['devices'] = get_available_ports()
+    if return_data['status'] == True:
+        return_data['msg'] = 'choose a device'
+    return return_data
+
+@app.route('/connect', methods=["GET"])
+def connect():
+    return_data = {
+        'status': False,
+        'msg': ''
+    }
+    if device is None:
+        port = request.args.get("device")
+        device, msg = connect_serial_port(port)
+    if device:
+        return_data['status'] = True
+    return_data['msg'] = msg
+
     return return_data
 
 @app.route('/api/gcode', methods=["GET"])
