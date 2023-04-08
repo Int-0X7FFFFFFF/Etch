@@ -32,17 +32,24 @@ def get_devices():
 
 @app.route('/connect', methods=["GET"])
 def connect():
+    global device
     return_data = {
         'status': False,
         'msg': ''
     }
+    port = request.args.get("device")
     if device is None:
-        port = request.args.get("device")
         device, msg = connect_serial_port(port)
-    if device:
-        return_data['status'] = True
-    return_data['msg'] = msg
-
+        if device:
+            return_data['status'] = True
+        return_data['msg'] = msg
+    else:
+        if port == 'disconnect':
+            device = None
+            return_data['status'] = True
+            return_data['msg'] = 'disconnected'
+        else:
+            return_data['msg'] = 'already connected'
     return return_data
 
 @app.route('/api/gcode', methods=["GET"])
