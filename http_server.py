@@ -23,6 +23,11 @@ def get_server():
 
 @app.route('/devices', methods=["GET"])
 def get_devices():
+    # return {
+    #     'status': True,
+    #     'devices': [],
+    #     'msg': ''
+    # }
     return_data = {
         'status': False,
         'devices': [],
@@ -65,16 +70,17 @@ def connect():
 def send_Gcode():
     return_data = {
         'status': False,
-        'msg' : ''
+        'msg' : 'need G-code'
     }
     g_code = request.args.get("code", type=str)
     if g_code is None:
-        return_data['msg'] = 'need G-code'
-        
-    msg = send_gcode(device, g_code, debug=False)
-    return return_data
+        return jsonify(return_data)
+    else:
+        return_data['status'] = True
+        return_data['msg'] = send_gcode(device, g_code, debug=False)
+    return jsonify(return_data)
 
-@app.route('/api/image/upload', methods=["GET"])
+@app.route('/connect/image/upload', methods=["GET"])
 def image_process():
     global lines
     img_b64 = request.args.get("img")
@@ -91,19 +97,18 @@ def image_process():
         'msg': "ok",
         'img': output_b64,
     }
-    return return_data
+    return jsonify(return_data)
 
-@app.route('/api/start', methods=["GET"])
+@app.route('/connect/image/draw', methods=["GET"])
 def start():
     return_data = {
         'status':True,
         'msg':"drawing starts now"
     }
-    return return_data
+    send_gcode_file(device, './result.gcode')
+    return jsonify(return_data)
 
-
-
-@app.route('/api/image/post', methods=["post"])
+@app.route('/connect/image/upload', methods=["post"])
 def image_process_post():
     global lines
     img_b64 = request.form['img']
@@ -112,7 +117,8 @@ def image_process_post():
     nparr = np.frombuffer(img_buffer, np.uint8)
     # Load the image from the numpy array
     img = cv2.imdecode(nparr, cv2.IMREAD_GRAYSCALE)
-    img, lines, output = get_lines(img)
+    h, w, lines, output = get_lines(img)
+    convert_img_to_gcode(lines, h, w)
     is_success, buffer = cv2.imencode(".png", output)
     output_byt = BytesIO(buffer)
     output_b64 = base64.b64encode(output_byt.getvalue()).decode("utf-8")
@@ -121,7 +127,7 @@ def image_process_post():
         'msg': "ok",
         'img': output_b64,
     }
-    return return_data
+    return jsonify(return_data)
 
 
 
@@ -167,7 +173,7 @@ def get_lines(img):
     # 保存图片
     # cv2.imwrite("output.jpg", canvas)
 
-    return img, lines, canvas
+    return h, w, lines, canvas
 
 if __name__ == "__main__":
     app.run(debug=True, port=9333)

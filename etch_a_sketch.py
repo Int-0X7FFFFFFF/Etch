@@ -160,7 +160,7 @@ def draw_a_picture(ser:serial.Serial, path):
     w_ratio = W / w
     set_current_position_as_initial(ser)
     with open('result.gcode', 'w') as f:
-        x, y = lines[0][0]
+        x, y = lines[0][0] # first line's start point
         if x == w:
             x = round(x * w_ratio, 2)
             y = round(y * h_ratio, 2)
@@ -172,7 +172,7 @@ def draw_a_picture(ser:serial.Serial, path):
             send_gcode(ser, point_to_g1(0, y))
             send_gcode(ser, point_to_g1(x, 0))
         f.write('G90\n')
-        x, y = lines[0][1]
+        x, y = lines[0][1] # first line's end point
         x = round(x * w_ratio, 2)
         y = round(y * h_ratio, 2)
         f.write(point_to_g1(x, y))
@@ -183,6 +183,32 @@ def draw_a_picture(ser:serial.Serial, path):
             f.write(point_to_g1(x, y))
         f.write('G91\n')
     send_gcode_file(ser, './result.gcode')
+
+def convert_img_to_gcode(lines, h, w):
+    h_ratio = H / h
+    w_ratio = W / w
+    with open('result.gcode', 'w') as f:
+        f.write('G92 X0 Y0\n')
+        x, y = lines[0][0]
+        if x == w:
+            x = round(x * w_ratio, 2)
+            y = round(y * h_ratio, 2)
+            f.write(point_to_g1(x, 0))
+            f.write(point_to_g1(0, y))
+        else:
+            x = round(x * w_ratio, 2)
+            y = round(y * h_ratio, 2)
+            f.write(point_to_g1(0, y))
+            f.write(point_to_g1(x, 0))
+        f.write('G90\n')
+        
+        for line in lines:
+            x, y = line[1]
+            x = round(x * w_ratio, 2)
+            y = round(y * h_ratio, 2)
+            f.write(point_to_g1(x, y))
+        f.write('G91\n')
+    
 
 def point_to_g1(x, y):
     return f'G1 X{x} Y{y}\n'

@@ -34,7 +34,7 @@ class Server {
   Future send_gcode(String gCode) async {
     var dio = Dio();
     Response response;
-    String API = "http://$api/api/gcode";
+    String API = "http://$api/connect/gcode";
     response = await dio.get(API, queryParameters: {'code': gCode});
     return response.data;
   }
@@ -50,7 +50,7 @@ class Server {
   Future etch_start() async {
     var dio = Dio();
     Response response;
-    String API = "http://$api/api/start";
+    String API = "http://$api/connect/image/draw";
     response = await dio.get(API, queryParameters: {});
     return response.data;
   }
@@ -58,7 +58,7 @@ class Server {
   Future post_image(String imgB64) async {
     var dio = Dio();
     Response response;
-    String API = "http://$api/api/image/post";
+    String API = "http://$api/connect/image/upload";
     response = await dio.post(API, data: FormData.fromMap({'img': imgB64}));
     return response.data;
   }
