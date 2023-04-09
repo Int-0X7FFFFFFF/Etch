@@ -112,7 +112,7 @@ def start():
 def image_process_post():
     global lines
     img_b64 = request.form['img']
-    print(img_b64)
+    # print(img_b64)
     img_buffer = base64.b64decode(img_b64)
     nparr = np.frombuffer(img_buffer, np.uint8)
     # Load the image from the numpy array

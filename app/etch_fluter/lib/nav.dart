@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'Gcode/g_code_page.dart';
 import 'draw/draw_page.dart';
+import 'gcode_file/gcode_file_page.dart';
+import 'default_shapes/default_shapes_page.dart';
 
 var _controller = PageController(
   initialPage: 0,
@@ -26,6 +28,8 @@ class _HomePageState extends State<HomePage> {
         children: const <Widget>[
           GcodePage(),
           DrawPage(),
+          GcodeFilePage(),
+          DefaultShapesPage()
         ],
       ),
     );
@@ -58,6 +62,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
         NavigationDestination(
           icon: Icon(Icons.draw),
           label: 'Draw',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.g_mobiledata_outlined),
+          label: 'Gcode File'
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.shape_line_outlined), 
+          label: 'Default Shapes'
         ),
       ],
       selectedIndex: _selectedIndex,

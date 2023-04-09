@@ -226,10 +226,10 @@ def send_gcode_file(ser:serial.Serial, file_path=None):
         i = 0
         with open(file_path, 'r') as f:
             for line in f:
-                print(line.rstrip())
+                # print(line.rstrip())
                 ser.write(line.encode('utf-8'))
                 response = ser.readline().decode('utf-8').strip()
-                print(response)
+                # print(response)
                 time.sleep(0.01)
                 if response != 'ok':#== 'echo:busy: processing':
                     time.sleep(5)
