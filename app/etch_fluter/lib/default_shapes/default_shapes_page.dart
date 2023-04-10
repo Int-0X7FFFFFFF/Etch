@@ -53,10 +53,9 @@ class _DefaultShapesPageState extends State<DefaultShapesPage> {
         onPressed: () async {
           Provider.of<Load>(context, listen: false).onloading();
           try {
-            var res = await server.connect_device(_selectedShape); //need update api
+            var res = await server.draw_shape(_selectedShape); //need update api
             if (res['status']) {
-              Navigator.pushNamed(context, '/home');
-              Provider.of<Load>(context, listen: false).outloading();
+             
             } else {
               throw Exception(res['msg']);
             }

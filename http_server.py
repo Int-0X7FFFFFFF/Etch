@@ -8,6 +8,7 @@ import cv2
 import base64
 from io import BytesIO
 import numpy as np
+import threading
 
 device:serial.Serial = None
 
@@ -105,7 +106,9 @@ def start():
         'status':True,
         'msg':"drawing starts now"
     }
-    send_gcode_file(device, './result.gcode')
+    thread = threading.Thread(target=send_gcode_file, args=(device, './result.gcode'))
+    thread.start()
+    # send_gcode_file(device, './result.gcode')
     return jsonify(return_data)
 
 @app.route('/connect/image/upload', methods=["post"])
@@ -129,6 +132,18 @@ def image_process_post():
     }
     return jsonify(return_data)
 
+@app.route('/connect/shapes', methods=['GET'])
+def draw_default_shapes():
+    return_data = {
+        'status':True,
+        'msg':"drawing starts now"
+    }
+    selected_shape = request.args.get('shape')
+    thread = threading.Thread(target=draw_default_shape, args=(device, selected_shape))
+    thread.start()
+    # draw_default_shape(device, selected_shape)
+    print("in draw_default_shapes()")
+    return jsonify(return_data)
 
 
 def get_lines(img):

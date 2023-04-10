@@ -37,12 +37,12 @@ class _GcodeFilePageState extends State<GcodeFilePage> {
               List<int> imageBytes = await pickedImage.readAsBytes();
               // Convert the image bytes to base64
               String base64Image = base64Encode(imageBytes);
-              var data = await server.post_image(base64Image);
-              if (data['status']) {
+              //var data = await server.post_image(base64Image);
+              // if (data['status']) {
 
-              } else {
-                throw Exception(data['msg']);
-              }
+              // } else {
+              //   throw Exception(data['msg']);
+              // }
             } else {
               Provider.of<Load>(context, listen: false).outloading();
               // No image picked

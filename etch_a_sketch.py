@@ -154,6 +154,19 @@ def draw_default_shape(ser:serial.Serial):
 
     send_gcode_file(ser, file_path)
 
+def draw_default_shape(ser:serial.Serial, shape_choice):
+    if shape_choice == "square":
+        file_path = "./square.gcode"
+    elif shape_choice == "circle":
+        file_path = "./circle.gcode"
+    elif shape_choice == "star":
+        file_path = "./star.gcode"
+    else:
+        return "Invalid choice. Please choose again.\n"
+
+    send_gcode_file(ser, file_path)
+    return
+
 def draw_a_picture(ser:serial.Serial, path):
     lines, h, w = get_lines(path)
     h_ratio = H / h

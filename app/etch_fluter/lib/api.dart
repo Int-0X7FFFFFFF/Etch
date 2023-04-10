@@ -62,4 +62,12 @@ class Server {
     response = await dio.post(API, data: FormData.fromMap({'img': imgB64}));
     return response.data;
   }
+
+  Future draw_shape(String shape) async {
+    var dio = Dio();
+    Response response;
+    String API = "http://$api/connect/shapes";
+    response = await dio.get(API, queryParameters: {'shape': shape});
+    return response.data;
+  }
 }
