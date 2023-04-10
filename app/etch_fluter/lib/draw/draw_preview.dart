@@ -42,7 +42,7 @@ class _PrviewPageState extends State<PrviewPage> {
                   ),
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                Navigator.pop(context);
+                // Navigator.pop(context);
               } else {
                 throw Exception(data['msg']);
               }

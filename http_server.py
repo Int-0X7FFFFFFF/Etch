@@ -55,12 +55,12 @@ def connect():
     if device is None:
         device, msg = connect_serial_port(port)
     else:
+        device.close()
         device = None
         if port == 'disconnect':
             return_data['status'] = True
             msg = 'disconnected'
         else:
-            device.close()
             device, msg = connect_serial_port(port)
     if device:
         return_data['status'] = True
