@@ -43,10 +43,10 @@ def get_devices():
 def connect():
     global device
 
-    return {
-        'status': True,
-        'msg': ''
-    }
+    # return {
+    #     'status': True,
+    #     'msg': ''
+    # }
     return_data = {
         'status': False,
         'msg': ''

@@ -79,7 +79,7 @@ class _MyAppState extends State<MyApp> {
                 brightness: Brightness.dark // M3 Baseline
                 ),
             routes: routes,
-            initialRoute: '/home',
+            initialRoute: '/',
           );
         } else {
           return const MaterialApp();

@@ -74,15 +74,16 @@ def connect_serial_port(port_name, baud_rate=115200, timeout=1):
         ser = serial.Serial(port=port_name, baudrate=baud_rate, timeout=timeout)
         ser.set_buffer_size(rx_size=4096, tx_size=4096)
         time.sleep(1.0)
-        ser.write(b'M115\n')
-        response = ser.readline().decode().strip()
-        if not response.startswith('echo:Marlin'):
-            return None, 'Marlin is not installed'
+        # ser.write(b'M115\n')
+        # response = ser.readline().decode().strip()
+        # print(response)
+        # if not response.startswith('echo:Marlin'):
+        #     return None, 'Marlin is not installed'
         # set to relative motion mode
         ser.write(b"G91\n")
-        response = ser.readline().decode('utf-8').rstrip()
+        # response = ser.readline().decode('utf-8').rstrip()
         ser.write(b"G21\n")
-        response = ser.readline().decode('utf-8').rstrip()
+        # response = ser.readline().decode('utf-8').rstrip()
     except serial.SerialException:
         msg = "Failed to establish serial connection"
     except serial.SerialTimeoutException:
@@ -245,6 +246,7 @@ def send_gcode_file(ser:serial.Serial, file_path=None):
                 # print(response)
                 time.sleep(0.01)
                 if response != 'ok':#== 'echo:busy: processing':
+                    print(response)
                     time.sleep(5)
     except FileNotFoundError:
         print("File not found!")
