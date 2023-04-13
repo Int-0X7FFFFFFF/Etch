@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:dio/dio.dart';
+import 'dart:io';
 
 class Server {
   final String api;
@@ -60,6 +61,15 @@ class Server {
     Response response;
     String API = "http://$api/connect/image/upload";
     response = await dio.post(API, data: FormData.fromMap({'img': imgB64}));
+    return response.data;
+  }
+
+  Future post_gfile(File gfile) async {
+    var dio = Dio();
+    Response response;
+    String API = "http://$api/connect/gfile/upload";
+    FormData formData = FormData.fromMap({'file': await MultipartFile.fromFile(gfile.path)});
+    response = await dio.post(API, data: formData);
     return response.data;
   }
 

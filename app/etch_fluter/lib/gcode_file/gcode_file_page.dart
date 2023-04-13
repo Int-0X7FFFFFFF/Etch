@@ -31,18 +31,18 @@ class _GcodeFilePageState extends State<GcodeFilePage> {
               allowMultiple: false,
             );
             if (result != null && result.files.isNotEmpty) {
-              File pickedImage = File(result.files.single.path!);
+              File gcode_file = File(result.files.single.path!);
               // Do something with the picked image file
               // Load an image from file
-              List<int> imageBytes = await pickedImage.readAsBytes();
+              // List<int> gfile_binary = await gcode_file.readAsBytes();
               // Convert the image bytes to base64
-              String base64Image = base64Encode(imageBytes);
-              //var data = await server.post_image(base64Image);
-              // if (data['status']) {
-
-              // } else {
-              //   throw Exception(data['msg']);
-              // }
+              // String base64Image = base64Encode(imageBytes);
+              var data = await server.post_gfile(gcode_file);
+              if (data['status']) {
+                Provider.of<Load>(context, listen: false).outloading();
+              } else {
+                throw Exception(data['msg']);
+              }
             } else {
               Provider.of<Load>(context, listen: false).outloading();
               // No image picked

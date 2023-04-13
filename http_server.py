@@ -113,7 +113,7 @@ def start():
 
 @app.route('/connect/image/upload', methods=["post"])
 def image_process_post():
-    global lines
+    # global lines
     img_b64 = request.form['img']
     # print(img_b64)
     img_buffer = base64.b64decode(img_b64)
@@ -130,6 +130,18 @@ def image_process_post():
         'msg': "ok",
         'img': output_b64,
     }
+    return jsonify(return_data)
+
+@app.route('/connect/gfile/upload', methods=['post'])
+def send_gcode_file():
+    return_data = {
+        'status': True,
+        'msg':"reading the G-Code file"
+    }
+    file = request.files['file']
+    file.save('received.gcode')
+    thread = threading.Thread(target=send_gcode_file, args=(device, './received.gcode'))
+    thread.start()
     return jsonify(return_data)
 
 @app.route('/connect/shapes', methods=['GET'])
